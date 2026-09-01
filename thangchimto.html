@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BẤT NGỜ SIÊU CẤP + GHÉP HÌNH 🔥</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: #0a0a0a;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px;
+        }
+        #fireworks {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 10;
+        }
+        .container {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            z-index: 5;
+        }
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            background: linear-gradient(90deg, #ff00cc, #3333ff, #00ffcc, #ff00cc);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 4s ease infinite;
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ===== PHẦN GHÉP HÌNH ===== */
+        #puzzle-section {
+            display: block;
+        }
+        .puzzle-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #ff9ff3;
+        }
+        #puzzle {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            width: 360px;
+            max-width: 90vw;
+            margin: 0 auto 25px;
+            background: #222;
+            padding: 6px;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(255, 0, 204, 0.3);
+        }
+        .tile {
+            aspect-ratio: 1;
+            background-size: 300% 300%;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: transform 0.15s, box-shadow 0.15s;
+            border: 2px solid transparent;
+        }
+        .tile:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+        }
+        .tile.selected {
+            border-color: #00ffff;
+            box-shadow: 0 0 20px #00ffff;
+            transform: scale(1.05);
+        }
+        .tile.empty {
+            background: #111 !important;
+            cursor: default;
+            border: none;
+        }
+        #puzzle-msg {
+            font-size: 1.1rem;
+            margin: 15px 0;
+            min-height: 30px;
+            color: #aaa;
+        }
+        #password-box {
+            display: none;
+            margin-top: 25px;
+            animation: fadeIn 0.8s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #password-box p {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #00ffcc;
+        }
+        #password-input {
+            padding: 14px 20px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            width: 280px;
+            max-width: 90%;
+            text-align: center;
+            background: #1a1a1a;
+            color: white;
+            border: 2px solid #ff00cc;
+            outline: none;
+        }
+        #password-input:focus {
+            box-shadow: 0 0 20px rgba(255, 0, 204, 0.5);
+        }
+        #check-btn {
+            margin-top: 15px;
+            background: linear-gradient(45deg, #ff0055, #ff00aa);
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 25px rgba(255, 0, 85, 0.5);
+            transition: all 0.3s;
+        }
+        #check-btn:hover {
+            transform: scale(1.08);
+        }
+
+        /* ===== PHẦN BẤT NGỜ CHÍNH ===== */
+        #main-surprise {
+            display: none;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+        #main-surprise.show {
+            display: block;
+            opacity: 1;
+        }
+        .line {
+            font-size: 1.7rem;
+            margin: 20px 0;
+            opacity: 0;
+            transform: translateY(40px) scale(0.9);
+            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .line.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .final {
+            font-size: 4.5rem !important;
+            font-weight: 900;
+            margin-top: 45px !important;
+            background: linear-gradient(90deg, #ff00cc, #ffff00, #00ffff, #ff00cc);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: finalGlow 2s ease infinite, pulse 1.5s ease infinite;
+            letter-spacing: 5px;
+        }
+        @keyframes finalGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        .kiss-img {
+            margin-top: 45px;
+            max-width: 100%;
+            width: 460px;
+            border-radius: 22px;
+            box-shadow: 0 0 60px rgba(255, 0, 204, 0.6);
+            opacity: 0;
+            transform: scale(0.3) rotate(-8deg);
+            transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 5px solid #ff00cc;
+        }
+        .kiss-img.show {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+            animation: shake 0.6s ease;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-12px); }
+            40% { transform: translateX(12px); }
+            60% { transform: translateX(-8px); }
+            80% { transform: translateX(8px); }
+        }
+        .footer {
+            margin-top: 50px;
+            font-size: 0.9rem;
+            opacity: 0.5;
+        }
+        .confetti {
+            position: fixed;
+            width: 12px; height: 12px;
+            top: -20px; z-index: 20;
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="fireworks"></canvas>
+
+    <div class="container">
+        <h1>💣 BẤT NGỜ SIÊU CẤP 💣</h1>
+
+        <!-- PHẦN GHÉP HÌNH -->
+        <div id="puzzle-section">
+            <p class="puzzle-title">🧩 Ghép hình đúng để mở mật khẩu</p>
+            <div id="puzzle"></div>
+            <p id="puzzle-msg">Click 2 ô để đổi chỗ. Ghép đúng sẽ hiện mật khẩu!</p>
+
+            <div id="password-box">
+                <p>✅ Ghép đúng rồi! Mật khẩu là:</p>
+                <p style="font-size: 1.8rem; color: #ff00cc; font-weight: bold; letter-spacing: 2px;">thangdeptraiwibu</p>
+                <input type="text" id="password-input" placeholder="Nhập mật khẩu ở đây..." autocomplete="off">
+                <br>
+                <button id="check-btn" onclick="checkPassword()">MỞ BẤT NGỜ 🔥</button>
+                <p id="pass-msg" style="margin-top: 12px; color: #ff6b6b;"></p>
+            </div>
+        </div>
+
+        <!-- PHẦN BẤT NGỜ CHÍNH -->
+        <div id="main-surprise">
+            <p class="line" id="l1">Nguyễn Cao Thắng...</p>
+            <p class="line" id="l2">là vua mở đầu nha 👑</p>
+            <p class="line" id="l3">Mọi người đều nghĩ vậy...</p>
+            <p class="line" id="l4">Nhưng sự thật là...</p>
+            <p class="line final" id="l5">VUA TUẤT</p>
+            
+            <img 
+                src="https://images.pexels.com/photos/4670728/pexels-photo-4670728.jpeg" 
+                alt="2 người đàn ông hôn nhau" 
+                class="kiss-img" 
+                id="kiss"
+            >
+            <p class="footer">Bạn đã bị bất ngờ chưa? 😈</p>
+        </div>
+    </div>
+
+    <script>
+        // ========== PUZZLE 3x3 ==========
+        const imgUrl = "https://images.pexels.com/photos/4670728/pexels-photo-4670728.jpeg";
+        let tiles = [];
+        let selected = null;
+        let solved = false;
+
+        function initPuzzle() {
+            const puzzle = document.getElementById('puzzle');
+            puzzle.innerHTML = '';
+            tiles = [];
+
+            // Tạo mảng vị trí đúng (0-8)
+            let positions = [0,1,2,3,4,5,6,7,8];
+            // Xáo trộn
+            for (let i = positions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [positions[i], positions[j]] = [positions[j], positions[i]];
+            }
+
+            positions.forEach((pos, index) => {
+                const tile = document.createElement('div');
+                tile.className = 'tile';
+                tile.dataset.correct = pos;
+                tile.dataset.current = index;
+
+                const row = Math.floor(pos / 3);
+                const col = pos % 3;
+                tile.style.backgroundImage = `url(${imgUrl})`;
+                tile.style.backgroundPosition = `${col * 50}% ${row * 50}%`;
+
+                tile.onclick = () => handleTileClick(tile, index);
+                puzzle.appendChild(tile);
+                tiles.push(tile);
+            });
+        }
+
+        function handleTileClick(tile, index) {
+            if (solved) return;
+
+            if (selected === null) {
+                selected = index;
+                tile.classList.add('selected');
+            } else if (selected === index) {
+                tiles[selected].classList.remove('selected');
+                selected = null;
+            } else {
+                // Đổi chỗ 2 ô
+                const tile1 = tiles[selected];
+                const tile2 = tiles[index];
+
+                // Đổi background
+                const bg1 = tile1.style.backgroundPosition;
+                const bg2 = tile2.style.backgroundPosition;
+                const correct1 = tile1.dataset.correct;
+                const correct2 = tile2.dataset.correct;
+
+                tile1.style.backgroundPosition = bg2;
+                tile2.style.backgroundPosition = bg1;
+                tile1.dataset.correct = correct2;
+                tile2.dataset.correct = correct1;
+
+                tile1.classList.remove('selected');
+                selected = null;
+
+                checkSolved();
+            }
+        }
+
+        function checkSolved() {
+            let isCorrect = true;
+            tiles.forEach((tile, i) => {
+                if (parseInt(tile.dataset.correct) !== i) {
+                    isCorrect = false;
+                }
+            });
+
+            if (isCorrect) {
+                solved = true;
+                document.getElementById('puzzle-msg').textContent = "🎉 Ghép đúng rồi!";
+                document.getElementById('puzzle-msg').style.color = "#00ffcc";
+                document.getElementById('password-box').style.display = 'block';
+                createConfetti();
+                createFirework();
+            }
+        }
+
+        // ========== KIỂM TRA MẬT KHẨU ==========
+        function checkPassword() {
+            const input = document.getElementById('password-input').value.trim().toLowerCase();
+            const msg = document.getElementById('pass-msg');
+
+            if (input === "thangdeptraiwibu") {
+                msg.textContent = "✅ Chính xác!";
+                msg.style.color = "#00ffcc";
+                
+                // Ẩn phần puzzle, hiện bất ngờ
+                setTimeout(() => {
+                    document.getElementById('puzzle-section').style.display = 'none';
+                    const main = document.getElementById('main-surprise');
+                    main.classList.add('show');
+                    startMainSurprise();
+                }, 800);
+            } else {
+                msg.textContent = "❌ Sai rồi, thử lại đi!";
+                msg.style.color = "#ff6b6b";
+            }
+        }
+
+        // Cho phép Enter
+        document.getElementById('password-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        // ========== PHẦN BẤT NGỜ CHÍNH ==========
+        const boomSound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-explosion-impact-1684.mp3");
+        const winSound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3");
+
+        function createConfetti() {
+            const colors = ['#ff00cc', '#00ffff', '#ffff00', '#ff0055', '#00ff88', '#ff9900'];
+            for (let i = 0; i < 120; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                confetti.style.width = confetti.style.height = Math.random() * 10 + 8 + 'px';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+
+        const canvas = document.getElementById('fireworks');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        function createFirework() {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height * 0.55;
+            const particles = [];
+            const colors = ['#ff00cc', '#00ffff', '#ffff00', '#ff0055'];
+
+            for (let i = 0; i < 45; i++) {
+                particles.push({
+                    x, y,
+                    vx: (Math.random() - 0.5) * 14,
+                    vy: (Math.random() - 0.5) * 14,
+                    life: 70,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p, i) => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.18;
+                    p.life--;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.life / 70;
+                    ctx.fill();
+                    if (p.life <= 0) particles.splice(i, 1);
+                });
+                if (particles.length > 0) requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        function startMainSurprise() {
+            setTimeout(() => document.getElementById('l1').classList.add('show'), 400);
+            setTimeout(() => document.getElementById('l2').classList.add('show'), 1400);
+            setTimeout(() => document.getElementById('l3').classList.add('show'), 2400);
+            setTimeout(() => document.getElementById('l4').classList.add('show'), 3400);
+
+            setTimeout(() => {
+                document.getElementById('l5').classList.add('show');
+                boomSound.play().catch(() => {});
+                createFirework();
+                createFirework();
+                createConfetti();
+            }, 4500);
+
+            setTimeout(() => {
+                document.getElementById('kiss').classList.add('show');
+                winSound.play().catch(() => {});
+                createFirework();
+                createFirework();
+                createConfetti();
+            }, 6200);
+
+            setTimeout(() => {
+                createFirework();
+                createConfetti();
+            }, 7500);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Khởi tạo puzzle
+        initPuzzle();
+    </script>
+</body>
+</html>
